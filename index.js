@@ -245,3 +245,42 @@ const finalMovements = accounts
   .flat()
   .reduce((acc, value) => acc + value, 0);
 console.log(finalMovements);
+
+// Function to display account details and prompt the user to choose one
+const promptAccountSelection = function () {
+  // Create a string listing all accounts
+  let accountDetails = "Choose an account to log in:\n\n";
+  accounts.forEach((acc, index) => {
+    accountDetails += `${index + 1}. ${acc.owner} (Username: ${
+      acc.username
+    }, PIN: ${acc.pin})\n`;
+  });
+
+  // Prompt the user to select an account
+  const selectedAccount = window.prompt(accountDetails);
+
+  // Validate the user's input
+  if (selectedAccount === null || selectedAccount === "") {
+    return; // User canceled or entered nothing
+  }
+
+  const selectedIndex = parseInt(selectedAccount) - 1; // Convert to zero-based index
+
+  if (
+    isNaN(selectedIndex) ||
+    selectedIndex < 0 ||
+    selectedIndex >= accounts.length
+  ) {
+    alert("Invalid selection. Please refresh the page and try again.");
+    return;
+  }
+
+  // Automatically fill in the login fields and log in
+  const chosenAccount = accounts[selectedIndex];
+  inputLoginUsername.value = chosenAccount.username;
+  inputLoginPin.value = chosenAccount.pin;
+  btnLogin.click(); // Simulate a click on the login button
+};
+
+// Call the function when the page loads
+window.addEventListener("load", promptAccountSelection);
